@@ -46,12 +46,4 @@ public sealed class TowerTilesPool
 
         return pool;
     }
-
-    public void ReleaseAll()
-    {
-        foreach (PrefabPool<TowerTile> pool in m_tilePrefabPools.Values)
-        {
-            
-        }
-    }
 }
