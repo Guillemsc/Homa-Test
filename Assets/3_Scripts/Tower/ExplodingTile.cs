@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ExplodingTile : TowerTile
 {
@@ -17,13 +15,6 @@ public class ExplodingTile : TowerTile
     {
         base.Awake();
         collider = GetComponent<Collider>();
-    }
-    protected override void OnDestroy()
-    {
-        if (CameraShakeManager.Instance)
-            CameraShakeManager.Instance.Play(1);
-        if (TileColorManager.Instance)
-            TileColorManager.Instance.OnColorListChanged -= ResetColor;
     }
 
     public override void SetColor(Color color)
@@ -50,5 +41,13 @@ public class ExplodingTile : TowerTile
                 hit.attachedRigidbody?.AddExplosionForce(force, collider.bounds.center, radius, 0, ForceMode.Impulse);
             }
         }
+    }
+    
+    public override void PlayDestroy()
+    {
+        if (CameraShakeManager.Instance)
+            CameraShakeManager.Instance.Play(1);
+        if (TileColorManager.Instance)
+            TileColorManager.Instance.OnColorListChanged -= ResetColor;
     }
 }

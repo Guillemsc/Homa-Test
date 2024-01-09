@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Tower : MonoBehaviour
 {
@@ -18,13 +20,10 @@ public class Tower : MonoBehaviour
 
     [Header("Scene")]
     public Transform CameraTarget;
-    public Transform TilesPoolParent;
 
     private List<List<TowerTile>> tilesByFloor;
     private int currentFloor = -1;
     private int maxFloor = 0;
-
-    private Dictionary<TowerTileType, PrefabPool<TowerTile>> m_tilePrefabPools = new();
     
     public System.Action<TowerTile> OnTileDestroyedCallback;
 
@@ -34,6 +33,11 @@ public class Tower : MonoBehaviour
         {
             BuildTower();
         }
+    }
+
+    private void OnDestroy()
+    {
+        ResetTower();
     }
 
     public float CaculateTowerRadius(float sideLength, float sideCount)
@@ -59,7 +63,7 @@ public class Tower : MonoBehaviour
                 
                 if (Application.isPlaying)
                 {
-                    PrefabPool<TowerTile> tilePool = GetOrCreatePoolForTowerTilePrefab(tilePrefab);
+                    PrefabPool<TowerTile> tilePool = TowerTilesPool.Instance.GetOrCreatePoolForTowerTilePrefab(tilePrefab);
                     tileInstance = tilePool.Get(); 
                 }
                 else
@@ -97,7 +101,8 @@ public class Tower : MonoBehaviour
             float maxHeight = 0;
             foreach (List<TowerTile> floor in tilesByFloor) {
                 foreach (TowerTile t in floor) {
-                    if (t != null)
+                    // May cause problems? A destroyed value would be better
+                    if (t.gameObject.activeInHierarchy)
                         maxHeight = Mathf.Max(t.transform.position.y, maxHeight);
                 }
             }
@@ -117,7 +122,7 @@ public class Tower : MonoBehaviour
                 foreach (TowerTile tile in tileList) {
                     if (Application.isPlaying)
                     {
-                        PrefabPool<TowerTile> tilePool = GetPoolForTowerTileType(tile.TileType);
+                        PrefabPool<TowerTile> tilePool = TowerTilesPool.Instance.GetPoolForTowerTileType(tile.TileType);
 
                         if (tilePool != null)
                         {
@@ -167,30 +172,5 @@ public class Tower : MonoBehaviour
                     tile.SetFreezed(!value);
             }
         }
-    }
-
-    PrefabPool<TowerTile> GetOrCreatePoolForTowerTilePrefab(TowerTile prefab)
-    {
-        bool poolFound = m_tilePrefabPools.TryGetValue(prefab.TileType, out PrefabPool<TowerTile> pool);
-
-        if (!poolFound)
-        {
-            pool = new PrefabPool<TowerTile>(prefab, TilesPoolParent);
-            m_tilePrefabPools.Add(prefab.TileType, pool);
-        }
-
-        return pool;
-    }
-    
-    [CanBeNull] PrefabPool<TowerTile> GetPoolForTowerTileType(TowerTileType type)
-    {
-        bool poolFound = m_tilePrefabPools.TryGetValue(type, out PrefabPool<TowerTile> pool);
-
-        if (!poolFound)
-        {
-            return null;
-        }
-
-        return pool;
     }
 }

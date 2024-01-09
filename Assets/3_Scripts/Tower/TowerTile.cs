@@ -143,13 +143,24 @@ public class TowerTile : MonoBehaviour
             StartCoroutine(ChainExplodeRoutine(instant));
         }
     }
+    
+    public virtual void PlayDestroy()
+    {
+        if (CameraShakeManager.Instance)
+            CameraShakeManager.Instance.Play(0);
+        if (TileColorManager.Instance)
+            TileColorManager.Instance.OnColorListChanged -= ResetColor;
+    }
 
     IEnumerator ChainExplodeRoutine(bool instant)
     {
         if (!instant)
             yield return new WaitForSeconds(chainExplodeDelay * Time.timeScale);
         for (int i = 0; i < connectedTiles.Count; i++) {
-            connectedTiles[i]?.Explode(false);
+            TowerTile tile = connectedTiles[i];
+            
+            if(tile.gameObject.activeInHierarchy)
+                tile.Explode(false);
         }
         OnTileDestroyed?.Invoke(this);
         ParticleSystem fx = FxPool.Instance.GetPooled(explosionFx, transform.position, Quaternion.identity);
@@ -157,6 +168,8 @@ public class TowerTile : MonoBehaviour
             ParticleSystem.MainModule main = fx.main;
             main.startColor = TileColorManager.Instance.GetColor(ColorIndex);
         }
-        Destroy(gameObject);
+
+        PlayDestroy();
+        gameObject.SetActive(false);
     }
 }
