@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Newtonsoft.Json;
 
 public static class SaveData
 {
@@ -41,5 +42,25 @@ public static class SaveData
         set {
             PlayerPrefs.SetInt("VibrationEnabled", value);
         }
+    }
+    
+    public static void Save<T>(string key, T value)
+    {
+        string serialized = JsonConvert.SerializeObject(value);
+        PlayerPrefs.SetString(key, serialized);
+    }
+    
+    public static T Load<T>(string key, T defaultValue)
+    {
+        bool exists = PlayerPrefs.HasKey(key);
+
+        if (!exists)
+        {
+            return defaultValue;
+        }
+        
+        string serialized = PlayerPrefs.GetString(key);
+        T item = JsonConvert.DeserializeObject<T>(serialized);
+        return item;
     }
 }

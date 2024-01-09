@@ -26,6 +26,8 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     ComboUI comboUI;
     [SerializeField]
+    MissionsUi missionsUI;
+    [SerializeField]
     Animation oneBallRemaining;
     [SerializeField]
     AnimationCurve percentRequiredPerLevel;
@@ -43,6 +45,9 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     ParticleSystem tileExplosionFx;
 
+    [SerializeField] 
+    List<MissionConfiguration> missionConfigurations = new();
+
     Animator animator;
 
     float minPercent = 0;
@@ -58,6 +63,10 @@ public class GameManager : Singleton<GameManager>
         animator.speed = 1.0f / Time.timeScale;
         FxPool.Instance.EnsureQuantity(tileExplosionFx, 3);
         FxPool.Instance.EnsureQuantity(tileDestroyFx, 30);
+        
+        MissionsService.Instance.Init(missionConfigurations);
+        
+        missionsUI.gameObject.SetActive(false);
     }
 
     private void Start()
@@ -126,4 +135,8 @@ public class GameManager : Singleton<GameManager>
         tower.StartGame();
     }
 
+    public void OpenMissionsPanel()
+    {
+        missionsUI.gameObject.SetActive(true);
+    }
 }
