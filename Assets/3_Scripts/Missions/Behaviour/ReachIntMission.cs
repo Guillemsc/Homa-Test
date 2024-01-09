@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public sealed class ReachIntMission : IMission
 {
     public IMissionConfiguration Configuration => ActualConfiguration;
@@ -12,6 +14,12 @@ public sealed class ReachIntMission : IMission
     public bool IsCompleted()
     {
         return CurrentAmmount >= ActualConfiguration.Ammount;
+    }
+
+    public string GetDisplayProgress()
+    {
+        int current = Mathf.Min(CurrentAmmount, ActualConfiguration.Ammount);
+        return $"{current}/{ActualConfiguration.Ammount}";
     }
 
     public TReturn Accept<TReturn>(IMissionVisitor<TReturn> visitor)

@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: MediumMissionDifficultyConfiguration
   m_EditorClassIdentifier: 
   DisplayName: Medium
+  DifficultyIndex: 1

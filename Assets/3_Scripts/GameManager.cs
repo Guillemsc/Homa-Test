@@ -64,7 +64,7 @@ public class GameManager : Singleton<GameManager>
         FxPool.Instance.EnsureQuantity(tileExplosionFx, 3);
         FxPool.Instance.EnsureQuantity(tileDestroyFx, 30);
         
-        MissionsService.Instance.Init(missionConfigurations);
+        MissionsService.Instance.Init(missionConfigurations, new EneOfEachDifficultyMissionGenerator(), 3);
         
         missionsUI.gameObject.SetActive(false);
     }
@@ -137,6 +137,7 @@ public class GameManager : Singleton<GameManager>
 
     public void OpenMissionsPanel()
     {
+        missionsUI.Refresh();
         missionsUI.gameObject.SetActive(true);
     }
 }

@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: HardMissionDifficultyConfiguration
   m_EditorClassIdentifier: 
   DisplayName: Hard
+  DifficultyIndex: 2

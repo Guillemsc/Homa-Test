@@ -7,6 +7,7 @@ public sealed class NopMission : IMission
     public IMissionConfiguration Configuration => NopMissionConfiguration.Instance;
 
     public bool IsCompleted() => false;
+    public string GetDisplayProgress() => "Nop";
 
     public TReturn Accept<TReturn>(IMissionVisitor<TReturn> visitor)
     {

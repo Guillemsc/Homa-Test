@@ -3,6 +3,7 @@ public sealed class NopMissionDifficultyConfiguration : IMissionDifficultyConfig
     public static readonly NopMissionDifficultyConfiguration Instance = new();
     
     public string DisplayName => string.Empty;
-    
+    public int DifficultyIndex => 0;
+
     NopMissionDifficultyConfiguration() {}
 }

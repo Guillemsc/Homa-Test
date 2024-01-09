@@ -117,29 +117,30 @@ public class Tower : MonoBehaviour
 
     public void ResetTower()
     {
-        if (tilesByFloor != null) {
-            foreach (List<TowerTile> tileList in tilesByFloor) {
-                foreach (TowerTile tile in tileList) {
-                    if (Application.isPlaying)
-                    {
-                        PrefabPool<TowerTile> tilePool = TowerTilesPool.Instance.GetPoolForTowerTileType(tile.TileType);
+        if (tilesByFloor == null)
+            return;
+        
+        foreach (List<TowerTile> tileList in tilesByFloor) {
+            foreach (TowerTile tile in tileList) {
+                if (Application.isPlaying)
+                {
+                    PrefabPool<TowerTile> tilePool = TowerTilesPool.Instance.GetPoolForTowerTileType(tile.TileType);
 
-                        if (tilePool != null)
-                        {
-                            tilePool.Release(tile);
-                        }
-                        else
-                        {
-                            Debug.LogError($"Tried to get pool for tower tile type {tile.TileType}, but it could not be found");
-                        }
+                    if (tilePool != null)
+                    {
+                        tilePool.Release(tile);
                     }
                     else
-                        DestroyImmediate(tile.gameObject);
+                    {
+                        Debug.LogError($"Tried to get pool for tower tile type {tile.TileType}, but it could not be found");
+                    }
                 }
-                tileList.Clear();
+                else
+                    DestroyImmediate(tile.gameObject);
             }
-            tilesByFloor.Clear();
+            tileList.Clear();
         }
+        tilesByFloor.Clear();
     }
 
     public void StartGame()

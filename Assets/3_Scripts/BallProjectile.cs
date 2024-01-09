@@ -70,6 +70,7 @@ public class BallProjectile : MonoBehaviour
         if (tile == target) {
             Explode();
             tile?.Explode(true);
+            MissionsService.Instance.AddToReachIntMission(1, MissionType.HitBarrels);
         }
     }
 
