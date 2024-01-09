@@ -27,6 +27,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -0.09, z: 0}
   m_LocalScale: {x: 1.15, y: 1.15, z: 1.15}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8808811945466939366}
   m_RootOrder: 0
@@ -41,9 +42,9 @@ MeshCollider:
   m_Material: {fileID: 13400000, guid: ca1feb1ce558fc34a99149e0beed48ff, type: 2}
   m_IsTrigger: 1
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 1
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7984033863786565122, guid: f05a0d6e263638646811ff7f6cee1b0d, type: 3}
 --- !u!1 &4963163471069255593
 GameObject:
@@ -76,6 +77,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0.6427876, z: 0, w: 0.7660445}
   m_LocalPosition: {x: 0, y: 0, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4498542723089361624}
   m_Father: {fileID: 0}
@@ -100,9 +102,12 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -127,6 +132,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &913908665645886416
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -137,9 +143,9 @@ MeshCollider:
   m_Material: {fileID: 13400000, guid: ca1feb1ce558fc34a99149e0beed48ff, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 1
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 7984033863786565122, guid: f05a0d6e263638646811ff7f6cee1b0d, type: 3}
 --- !u!54 &2004615318925662448
 Rigidbody:
@@ -169,6 +175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4646943d52fc3c4084d767c41f06a0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TileType: 1
   renderer: {fileID: 8650600626305695204}
   originalMaterial: {fileID: 2100000, guid: bbc9d732c763eda49a504d450679c8ba, type: 2}
   rigidbody: {fileID: 2004615318925662448}

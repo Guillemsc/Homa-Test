@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class TowerTile : MonoBehaviour
 {
+    [SerializeField] 
+    public TowerTileType TileType;
+    
     [SerializeField]
     protected new MeshRenderer renderer;
     [SerializeField]

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class Tower : MonoBehaviour
@@ -17,16 +18,20 @@ public class Tower : MonoBehaviour
 
     [Header("Scene")]
     public Transform CameraTarget;
+    public Transform TilesPoolParent;
 
     private List<List<TowerTile>> tilesByFloor;
     private int currentFloor = -1;
     private int maxFloor = 0;
 
+    private Dictionary<TowerTileType, PrefabPool<TowerTile>> m_tilePrefabPools = new();
+    
     public System.Action<TowerTile> OnTileDestroyedCallback;
 
     private void Start()
     {
-        if (BuildOnStart) {
+        if (BuildOnStart) 
+        {
             BuildTower();
         }
     }
@@ -48,7 +53,26 @@ public class Tower : MonoBehaviour
             for (int i = 0; i < TileCountPerFloor; i++) {
                 Quaternion direction = Quaternion.AngleAxis(angleStep * i, Vector3.up) * floorRotation;
                 Vector3 position = transform.position + Vector3.up * y * TileHeight + direction * Vector3.forward * towerRadius;
-                TowerTile tileInstance = Instantiate(Random.value > SpecialTileChance ? TilePrefab : SpecialTilePrefabs[Random.Range(0, SpecialTilePrefabs.Length)], position, direction * TilePrefab.transform.rotation, transform);
+                
+                TowerTile tilePrefab = Random.value > SpecialTileChance ? TilePrefab : SpecialTilePrefabs[Random.Range(0, SpecialTilePrefabs.Length)];
+                TowerTile tileInstance;
+                
+                if (Application.isPlaying)
+                {
+                    PrefabPool<TowerTile> tilePool = GetOrCreatePoolForTowerTilePrefab(tilePrefab);
+                    tileInstance = tilePool.Get(); 
+                }
+                else
+                {
+                    tileInstance = Instantiate(tilePrefab);
+                }
+                
+                Quaternion tileRotation = direction * TilePrefab.transform.rotation;
+                Transform tileTransform = tileInstance.transform;
+                
+                tileTransform.position = position;
+                tileTransform.rotation = tileRotation;
+                
                 tileInstance.SetColorIndex(Mathf.FloorToInt(Random.value * TileColorManager.Instance.ColorCount));
                 tileInstance.SetFreezed(true);
                 tileInstance.Floor = y;
@@ -92,7 +116,18 @@ public class Tower : MonoBehaviour
             foreach (List<TowerTile> tileList in tilesByFloor) {
                 foreach (TowerTile tile in tileList) {
                     if (Application.isPlaying)
-                        Destroy(tile.gameObject);
+                    {
+                        PrefabPool<TowerTile> tilePool = GetPoolForTowerTileType(tile.TileType);
+
+                        if (tilePool != null)
+                        {
+                            tilePool.Release(tile);
+                        }
+                        else
+                        {
+                            Debug.LogError($"Tried to get pool for tower tile type {tile.TileType}, but it could not be found");
+                        }
+                    }
                     else
                         DestroyImmediate(tile.gameObject);
                 }
@@ -134,4 +169,28 @@ public class Tower : MonoBehaviour
         }
     }
 
+    PrefabPool<TowerTile> GetOrCreatePoolForTowerTilePrefab(TowerTile prefab)
+    {
+        bool poolFound = m_tilePrefabPools.TryGetValue(prefab.TileType, out PrefabPool<TowerTile> pool);
+
+        if (!poolFound)
+        {
+            pool = new PrefabPool<TowerTile>(prefab, TilesPoolParent);
+            m_tilePrefabPools.Add(prefab.TileType, pool);
+        }
+
+        return pool;
+    }
+    
+    [CanBeNull] PrefabPool<TowerTile> GetPoolForTowerTileType(TowerTileType type)
+    {
+        bool poolFound = m_tilePrefabPools.TryGetValue(type, out PrefabPool<TowerTile> pool);
+
+        if (!poolFound)
+        {
+            return null;
+        }
+
+        return pool;
+    }
 }
