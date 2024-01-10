@@ -26,6 +26,8 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     ComboUI comboUI;
     [SerializeField]
+    Button missionsButton;
+    [SerializeField]
     MissionsUi missionsUI;
     [SerializeField]
     Animation oneBallRemaining;
@@ -63,9 +65,13 @@ public class GameManager : Singleton<GameManager>
         animator.speed = 1.0f / Time.timeScale;
         FxPool.Instance.EnsureQuantity(tileExplosionFx, 3);
         FxPool.Instance.EnsureQuantity(tileDestroyFx, 30);
+
+        if (RemoteConfig.MISSIONS_ENABLED)
+        {
+            MissionsService.Instance.Init(missionConfigurations, new EneOfEachDifficultyMissionGenerator(), 3);   
+        }
         
-        MissionsService.Instance.Init(missionConfigurations, new EneOfEachDifficultyMissionGenerator(), 3);
-        
+        missionsButton.gameObject.SetActive(RemoteConfig.MISSIONS_ENABLED);
         missionsUI.gameObject.SetActive(false);
     }
 
