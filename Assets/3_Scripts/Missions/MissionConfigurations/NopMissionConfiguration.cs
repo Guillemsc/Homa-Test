@@ -4,6 +4,7 @@ public sealed class NopMissionConfiguration : IMissionConfiguration
         
     public string Uid => string.Empty;
     public IMissionDifficultyConfiguration DifficultyConfiguration => NopMissionDifficultyConfiguration.Instance;
+    public IRewardConfiguration RewardConfiguration => NopRewardConfiguration.Instance;
     public MissionType MissionType => default;
     public string DisplayName => string.Empty;
         

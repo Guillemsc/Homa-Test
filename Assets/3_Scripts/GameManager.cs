@@ -140,4 +140,9 @@ public class GameManager : Singleton<GameManager>
         missionsUI.Refresh();
         missionsUI.gameObject.SetActive(true);
     }
+    
+    public void Dispose()
+    {
+        tower.Dispose();
+    }
 }

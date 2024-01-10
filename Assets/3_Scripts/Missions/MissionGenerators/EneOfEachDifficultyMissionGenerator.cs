@@ -22,9 +22,9 @@ public sealed class EneOfEachDifficultyMissionGenerator : IMissionGenerator
 
     public IMission Replace(MissionsData missionsData, IMission previous)
     {
-        IMissionConfiguration missionConfiguration = GetRandomMissionConfigurationWithDifficulty(
+        IMissionConfiguration missionConfiguration = GetNewRandomMissionConfigurationWithSameDifficulty(
             missionsData,
-            previous.Configuration.DifficultyConfiguration
+            previous
         );
 
         IMission newMission = CreateMissionFromMissionConfiguration.Instance.Execute(missionConfiguration);
@@ -65,13 +65,13 @@ public sealed class EneOfEachDifficultyMissionGenerator : IMissionGenerator
         return missionsData.MissionDifficultyConfigurations[randomIndex];
     }
     
-    IMissionConfiguration GetRandomMissionConfigurationWithDifficulty(
+    IMissionConfiguration GetNewRandomMissionConfigurationWithSameDifficulty(
         MissionsData missionsData,
-        IMissionDifficultyConfiguration difficultyConfiguration
+        IMission previousMission
     )
     {
         bool difficultyFound = missionsData.MissionDifficultyConfigurationByMissionConfiguration.TryGetValue(
-            difficultyConfiguration,
+            previousMission.Configuration.DifficultyConfiguration,
             out List<IMissionConfiguration> missionConfigurations
         );
 
@@ -80,8 +80,31 @@ public sealed class EneOfEachDifficultyMissionGenerator : IMissionGenerator
             return NopMissionConfiguration.Instance;
         }
 
-        int randomIndex = UnityEngine.Random.Range(0, missionConfigurations!.Count);
+        if (missionConfigurations.Count == 0)
+        {
+            return NopMissionConfiguration.Instance;
+        }
 
-        return missionConfigurations[randomIndex];
+        List<IMissionConfiguration> uniqueMissions = new();
+
+        foreach (IMissionConfiguration missionConfiguration in missionConfigurations)
+        {
+            bool isDifferent = missionConfiguration != previousMission.Configuration;
+
+            if (isDifferent)
+            {
+                uniqueMissions.Add(missionConfiguration);
+            }
+        }
+
+        if (uniqueMissions.Count == 0)
+        {
+            int randomIndex = UnityEngine.Random.Range(0, missionConfigurations!.Count);
+            return missionConfigurations[randomIndex];
+        }
+
+        int uniqueRandomIndex = UnityEngine.Random.Range(0, uniqueMissions!.Count);
+
+        return uniqueMissions[uniqueRandomIndex];
     }
 }

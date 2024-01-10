@@ -28,6 +28,9 @@ public sealed class CreateMissionFromMissionSaveData : IMissionSaveDataVisitor<I
 
     public IMission Visit(ReachIntMissionSaveData saveData, IMissionConfiguration configuration)
     {
-        return new ReachIntMission((ReachIntMissionConfiguration)configuration);
+        return new ReachIntMission((ReachIntMissionConfiguration)configuration)
+        {
+            CurrentAmmount = saveData.CurrentAmmount,
+        };
     }
 }

@@ -4,6 +4,12 @@ using Newtonsoft.Json;
 
 public static class SaveData
 {
+    static readonly JsonSerializerSettings SerializeSettings = new JsonSerializerSettings()
+    {
+        NullValueHandling = NullValueHandling.Ignore,
+        TypeNameHandling = TypeNameHandling.Auto,
+    };
+    
     public static int CurrentLevel
     {
         get {
@@ -46,7 +52,7 @@ public static class SaveData
     
     public static void Save<T>(string key, T value)
     {
-        string serialized = JsonConvert.SerializeObject(value);
+        string serialized = JsonConvert.SerializeObject(value, SerializeSettings);
         PlayerPrefs.SetString(key, serialized);
     }
     
@@ -60,7 +66,7 @@ public static class SaveData
         }
         
         string serialized = PlayerPrefs.GetString(key);
-        T item = JsonConvert.DeserializeObject<T>(serialized);
+        T item = JsonConvert.DeserializeObject<T>(serialized, SerializeSettings);
         return item;
     }
 }

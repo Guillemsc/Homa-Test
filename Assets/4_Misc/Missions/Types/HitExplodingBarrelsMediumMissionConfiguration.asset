@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7fbf956d699d41cf983ae3abea19d546, type: 3}
-  m_Name: HitBarrelsHardMissionConfiguration
+  m_Name: HitExplodingBarrelsMediumMissionConfiguration
   m_EditorClassIdentifier: 
-  Uid: bd882407-820f-4b78-89d1-cf3967a10931
-  DifficultyConfiguration: {fileID: 11400000, guid: 83b3c5ec23bfa8e41b7bf9c8738b19fe,
+  Uid: 9622318e-8bd9-405a-bf00-fe34e2bf4546
+  DifficultyConfiguration: {fileID: 11400000, guid: 337aab7da6ff0454cb5105eb0348e89e,
     type: 2}
   RewardConfiguration: {fileID: 11400000, guid: e309c262a5f0b8a4b9a8ee665cb98d92,
     type: 2}
-  MissionType: 0
-  DisplayName: Hit barrels
-  Ammount: 3
+  MissionType: 1
+  DisplayName: Hit exploding barrels
+  Ammount: 2

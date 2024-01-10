@@ -15,5 +15,8 @@ MonoBehaviour:
   Uid: d618131b-7f5e-486e-84a7-da3c560f64f1
   DifficultyConfiguration: {fileID: 11400000, guid: 977783fff3b1f2f47878f0a4a5a667e3,
     type: 2}
+  RewardConfiguration: {fileID: 11400000, guid: e309c262a5f0b8a4b9a8ee665cb98d92,
+    type: 2}
+  MissionType: 0
   DisplayName: Hit barrels
   Ammount: 1

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 #nullable enable
@@ -37,13 +38,34 @@ public sealed class MissionsService
         CreateNecessaryMissions();
     }
 
-    public void AddToReachIntMission(int add, MissionType missionType)
+    public void ProgressReachIntMission(int add, MissionType missionType)
     {
-        List<ReachIntMission> missions = GetActiveMissionsOfType<ReachIntMission>(missionType);
+        ProgressMission<ReachIntMission>(missionType, m => m.CurrentAmmount += add);
+    }
 
-        foreach (ReachIntMission mission in missions)
+    void ProgressMission<T>(MissionType missionType, Action<T> progressAction) where T : IMission
+    {
+        bool somethingChanged = false;
+        
+        List<T> missions = GetActiveMissionsOfType<T>(missionType);
+        
+        foreach (T mission in missions)
         {
-            mission.CurrentAmmount += add;
+            bool wasCompleted = mission.IsCompleted();
+
+            if (wasCompleted)
+            {
+                continue;
+            }
+            
+            progressAction?.Invoke(mission);
+
+            somethingChanged = true;
+        }
+
+        if (somethingChanged)
+        {
+            SaveToSaveData();
         }
     }
 
@@ -72,28 +94,20 @@ public sealed class MissionsService
         }
     }
     
-    public void RefreshCompletedMissions()
+    public void ReplaceMission(IMission mission)
     {
-        List<IMission> completedMissions = new();
+        bool wasActive = m_missionsData.ActiveMissions.Remove(mission);
+
+        if (!wasActive)
+        {
+            return;
+        }
+
+        IMission newMission = m_missionGenerator.Replace(m_missionsData, mission); 
+            
+        m_missionsData.ActiveMissions.Add(newMission);
         
-        foreach (IMission mission in m_missionsData.ActiveMissions)
-        {
-            bool completed = mission.IsCompleted();
-
-            if (completed)
-            {
-                completedMissions.Add(mission);
-            }
-        }
-
-        foreach (IMission completedMission in completedMissions)
-        {
-            m_missionsData.ActiveMissions.Remove(completedMission);
-            
-            IMission newMission = m_missionGenerator.Replace(m_missionsData, completedMission); 
-            
-            m_missionsData.ActiveMissions.Add(newMission);
-        }
+        SaveToSaveData();
     }
     
     void CreateNecessaryMissions()
@@ -104,6 +118,8 @@ public sealed class MissionsService
             
             m_missionsData.ActiveMissions.Add(newMission);
         }
+        
+        SaveToSaveData();
     }
 
     List<T> GetActiveMissionsOfType<T>(MissionType missionType) where T : IMission

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class Tower : MonoBehaviour
+public class Tower : MonoBehaviour, IDisposable
 {
     [Header("Tower Settings")]
     public float TileHeight = 1.2f;
@@ -34,12 +33,7 @@ public class Tower : MonoBehaviour
             BuildTower();
         }
     }
-
-    private void OnDestroy()
-    {
-        ResetTower();
-    }
-
+    
     public float CaculateTowerRadius(float sideLength, float sideCount)
     {
         return sideLength / (2 * Mathf.Sin(Mathf.Deg2Rad * (180.0f / sideCount)));
@@ -173,5 +167,10 @@ public class Tower : MonoBehaviour
                     tile.SetFreezed(!value);
             }
         }
+    }
+
+    public void Dispose()
+    {
+        ResetTower();
     }
 }

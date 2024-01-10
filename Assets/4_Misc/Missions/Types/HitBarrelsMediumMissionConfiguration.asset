@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fbf956d699d41cf983ae3abea19d546, type: 3}
   m_Name: HitBarrelsMediumMissionConfiguration
   m_EditorClassIdentifier: 
-  Uid: d618131b-7f5e-486e-84a7-da3c560f64f2
+  Uid: 3220b6ea-66fe-46c4-974c-8d69942d90ce
   DifficultyConfiguration: {fileID: 11400000, guid: 337aab7da6ff0454cb5105eb0348e89e,
+    type: 2}
+  RewardConfiguration: {fileID: 11400000, guid: e309c262a5f0b8a4b9a8ee665cb98d92,
     type: 2}
   MissionType: 0
   DisplayName: Hit barrels
