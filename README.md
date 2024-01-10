@@ -26,6 +26,9 @@ for being able to know which pool to use for each type.
 - Also had to tweak different systems that relied on the barrels being
 destroyed.
 
+- Added a `Dispose` method on the `GameManager` that is called before the scene is unload, so we can return all barrels to
+the pool.
+
 ### 2. We would like to add missions to the game in order to improve the retention of our players.
 - Added a button on the start menu to open the missions panel. Once a completed mission is claimed, a new one appears.
 </br> </br>
