@@ -32,7 +32,7 @@ destroyed.
 ![image](https://github.com/Guillemsc/Homa-Test/assets/17142208/adcb7fdd-4c36-4038-9e96-31d4b507e72a)
 
 - Missions data is divided in 3 parts: Configuration (`IMissionConfiguration`), Logic (`IMission`), and Save data (`MissionSaveData`). Missions are configured with scriptable objects,
-which ten are converted into runtime logic. Every time a change is detected on the missions, they get saved into disk.
+which then are converted into runtime logic. Every time a change is detected on the missions, they get saved into disk.
 When opening the game, the previous missions state is loaded.
 
 - Each mission has some difficulty and some reward.
