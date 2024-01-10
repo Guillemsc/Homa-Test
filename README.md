@@ -36,3 +36,5 @@ which ten are converted into runtime logic. Every time a change is detected on t
 When opening the game, the previous missions state is loaded.
 
 - Each mission has some difficulty and some reward.
+
+- The whole system is built so mission addition is data driven, and adding new missions, and new types of missions is easy.
