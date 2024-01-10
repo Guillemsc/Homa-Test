@@ -31,10 +31,13 @@ destroyed.
 </br> </br>
 ![image](https://github.com/Guillemsc/Homa-Test/assets/17142208/adcb7fdd-4c36-4038-9e96-31d4b507e72a)
 
-- Missions data is divided in 3 parts: Configuration, Logic, and Save data. Missions are configured with scriptable objects,
+- Missions data is divided in 3 parts: Configuration (`IMissionConfiguration`), Logic (`IMission`), and Save data (`MissionSaveData`). Missions are configured with scriptable objects,
 which ten are converted into runtime logic. Every time a change is detected on the missions, they get saved into disk.
 When opening the game, the previous missions state is loaded.
 
 - Each mission has some difficulty and some reward.
 
 - The whole system is built so mission addition is data driven, and adding new missions, and new types of missions is easy.
+
+- Remark:
+  - The visitor pattern is used in some parts of the code. [More info](https://en.wikipedia.org/wiki/Visitor_pattern).
